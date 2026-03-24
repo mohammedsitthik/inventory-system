@@ -1,12 +1,17 @@
-const form = document.querySelector("form");
+const form = document.getElementById("registerForm");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const name = document.querySelector("input[placeholder='Name']").value;
-  const email = document.querySelector("input[placeholder='Email']").value;
-  const password = document.querySelector("input[placeholder='Password']").value;
-  const role = document.querySelector("select").value;
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const role = document.getElementById("role").value;
+
+  if (!name || !email || !password) {
+    alert("Fill all fields ❌");
+    return;
+  }
 
   try {
     const res = await fetch("http://localhost:5000/api/auth/register", {

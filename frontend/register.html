@@ -7,26 +7,34 @@
 
 <body>
 
-<div class="card">
-  <h2>Register</h2>
+  <div class="card">
+    <h2>Register</h2>
 
-  <input type="text" id="name" placeholder="Name">
-  <input type="email" id="email" placeholder="Email">
+    <!-- FORM START -->
+    <form id="registerForm">
 
-  <select id="role">
-    <option value="customer">Customer</option>
-    <option value="shopkeeper">Shopkeeper</option>
-  </select>
+      <input type="text" id="name" placeholder="Name" required>
 
-  <input type="password" id="password" placeholder="Password">
+      <input type="email" id="email" placeholder="Email" required>
 
-  <button onclick="registerUser()">Register</button>
+      <select id="role">
+        <option value="customer">Customer</option>
+        <option value="shopkeeper">Shopkeeper</option>
+      </select>
 
-  <p>Already have account? <a href="login.html">Login</a></p>
-</div>
+      <input type="password" id="password" placeholder="Password" required>
 
-<!-- 🔥 IMPORTANT -->
-<script src="js/auth.js"></script>
+      <!-- ❌ onclick remove -->
+      <button type="submit">Register</button>
+
+    </form>
+    <!-- FORM END -->
+
+    <p>Already have account? <a href="login.html">Login</a></p>
+  </div>
+
+  <!-- correct JS -->
+  <script src="/frontend/register.js"></script>
 
 </body>
 </html>
