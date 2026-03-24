@@ -1,31 +1,33 @@
-function registerUser() {
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const role = document.getElementById("role").value;
+const form = document.querySelector("form");
 
-    console.log("Register clicked");
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    fetch("http://127.0.0.1:5003/api/auth/register", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name, email, password, role })
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
+  const name = document.querySelector("input[placeholder='Name']").value;
+  const email = document.querySelector("input[placeholder='Email']").value;
+  const password = document.querySelector("input[placeholder='Password']").value;
+  const role = document.querySelector("select").value;
 
-        if (data.success) {
-            alert("Registered successfully ✅");
-            window.location.href = "login.html";
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(err => {
-        console.log(err);
-        alert("Server error ❌");
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, email, password, role })
     });
-}
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Registered Successfully ✅");
+      window.location.href = "login.html";
+    } else {
+      alert(data.message);
+    }
+
+  } catch (err) {
+    console.log(err);
+    alert("Server error ❌");
+  }
+});

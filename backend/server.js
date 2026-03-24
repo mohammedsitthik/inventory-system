@@ -1,28 +1,20 @@
 const express = require("express");
-const cors = require("cors");
-
-// routes
-const authRoutes = require("./routes/authRoutes");
-const productRoutes = require("./routes/productRoutes");
+const mongoose = require("mongoose");
 
 const app = express();
-
-// middleware
-app.use(cors());
 app.use(express.json());
 
-// routes
-app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
+// MongoDB connect
+mongoose.connect("mongodb://sitthik180222004_db_user:sitthik123@ac-fmmqaqe-shard-00-00.a2aoav1.mongodb.net:27017,ac-fmmqaqe-shard-00-01.a2aoav1.mongodb.net:27017,ac-fmmqaqe-shard-00-02.a2aoav1.mongodb.net:27017/?ssl=true&replicaSet=atlas-mlvl93-shard-0&authSource=admin&appName=Cluster0")
+.then(() => console.log("MongoDB Connected ✅"))
+.catch(err => console.log(err));
 
-// test route
+// Test route
 app.get("/", (req, res) => {
-  res.send("Server working 🚀");
+    res.send("Server Running 🚀");
 });
 
-// start server
-const PORT = 5003;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} 🚀`);
+// Server start
+app.listen(5000, () => {
+    console.log("Server running on port 5000 🔥");
 });

@@ -1,76 +1,73 @@
-const db = require("../config/db");
-
+const User = require("../models/userModel");
 
 // ================= REGISTER =================
-exports.register = (req, res) => {
-  const { name, email, password, role } = req.body;
+exports.register = async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
 
-  // check user already exists
-  db.query(
-    "SELECT * FROM users WHERE email = ?",
-    [email],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.json({ success: false, message: "Server error" });
-      }
+    // check user exists
+    const existingUser = await User.findOne({ email });
 
-      if (result.length > 0) {
-        return res.json({ success: false, message: "User already exists" });
-      }
-
-      // insert user
-      db.query(
-        "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
-        [name, email, password, role],
-        (err, result) => {
-          if (err) {
-            console.log(err);
-            return res.json({ success: false, message: "Server error" });
-          }
-
-          res.json({ success: true, message: "Registered successfully" });
-        }
-      );
-    }
-  );
-};
-
-
-
-// ================= LOGIN =================
-exports.login = (req, res) => {
-  const { email, password, role } = req.body;
-
-  console.log("LOGIN DATA:", email, password, role);
-
-  db.query(
-    "SELECT * FROM users WHERE email = ? AND role = ?",
-    [email, role],
-    (err, result) => {
-      if (err) {
-        console.log("DB ERROR:", err);
-        return res.json({ success: false, message: "Server error" });
-      }
-
-      if (!result || result.length === 0) {
-        return res.json({ success: false, message: "Invalid credentials" });
-      }
-
-      const user = result[0];
-
-      console.log("DB USER:", user);
-
-      // password check
-      if (user.password != password) {
-        return res.json({ success: false, message: "Invalid credentials" });
-      }
-
-      res.json({
-        success: true,
-        message: "Login success",
-        user: user
+    if (existingUser) {
+      return res.json({
+        success: false,
+        message: "User already exists"
       });
     }
-  );
+
+    // create user
+    const newUser = new User({
+      name,
+      email,
+      password,
+      role
+    });
+
+    await newUser.save();
+
+    res.json({
+      success: true,
+      message: "Registered successfully"
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.json({
+      success: false,
+      message: "Server error"
+    });
+  }
+};
+
+// ================= LOGIN =================
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "User not found ❌"
+      });
+    }
+
+    if (user.password !== password) {
+      return res.json({
+        success: false,
+        message: "Wrong password ❌"
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Login success ✅",
+      user
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.json({ success: false, message: "Server error ❌" });
+  }
 };

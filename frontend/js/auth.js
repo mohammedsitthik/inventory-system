@@ -1,91 +1,76 @@
-// REGISTER
-function register() {
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  fetch("http://localhost:5003/api/auth/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ name, email, password })
-  })
-    .then(res => res.json())
-    .then(data => {
-      alert(data.message);
-      window.location.href = "login.html";
-    })
-    .catch(err => console.log(err));
-}
-
-
-// LOGIN
-function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  fetch("http://localhost:5003/api/auth/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ email, password })
-  })
-    .then(res => res.json())
-    .then(data => {
-      alert(data.message);
-
-      if (data.success) {
-        window.location.href = "shopkeeper-dashboard.html";
-      }
-    })
-    .catch(err => console.log(err));
-}
-
-
-async function loginUser() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  const res = await fetch("http://localhost:5003/auth/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ email, password })
-  });
-
-  const data = await res.json();
-
-  alert(data.message);
-
-  if (data.success) {
-    window.location.href = "customer-dashboard.html";
-  }
-}
-
-
-
-
+// ================= REGISTER =================
 async function registerUser() {
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+  const role = document.getElementById("role").value;
 
-  const res = await fetch("http://localhost:5003/auth/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ name, email, password })
-  });
+  if (!name || !email || !password) {
+    alert("Fill all fields ❌");
+    return;
+  }
 
-  const data = await res.json();
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, email, password, role })
+    });
 
-  alert(data.message);
+    const data = await res.json();
 
-  if (data.success) {
-    window.location.href = "login.html";
+    alert(data.message);
+
+    if (data.success) {
+      window.location.href = "login.html";
+    }
+
+  } catch (err) {
+    console.log(err);
+    alert("Server error ❌");
+  }
+}
+
+// ================= LOGIN =================
+async function loginUser() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    alert("Fill all fields ❌");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    alert(data.message);
+
+    if (data.success) {
+
+      // 🔥 user save pannrom
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // 🔥 role based redirect
+      if (data.user.role === "shopkeeper") {
+        window.location.href = "shopkeeper-dashboard.html";
+      } else {
+        window.location.href = "customer-dashboard.html";
+      }
+    }
+
+  } catch (err) {
+    console.log(err);
+    alert("Server error ❌");
   }
 }
