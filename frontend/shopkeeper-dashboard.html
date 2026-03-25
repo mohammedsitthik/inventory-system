@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Shopkeeper Dashboard</title>
+
   <link rel="stylesheet" href="dashboard.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-  <script>
+<script>
 const user = JSON.parse(localStorage.getItem("user"));
 
 if (!user || user.role !== "shopkeeper") {
@@ -18,15 +20,17 @@ if (!user || user.role !== "shopkeeper") {
 
 <div class="container">
 
-  <!-- Sidebar -->
+  <!-- SIDEBAR -->
   <div class="sidebar">
-    <h2>Shopkeeper</h2>
+    <div>
+      <h2>Shopkeeper</h2>
 
-    <ul>
-      <li class="active">Dashboard</li>
-      <li>Manage Products</li>
-      <li>Manage Orders</li>
-    </ul>
+      <ul>
+        <li class="active" onclick="showDashboard(event)">Dashboard</li>
+        <li onclick="showProducts(event)">Manage Products</li>
+        <li>Manage Orders</li>
+      </ul>
+    </div>
 
     <div class="user">
       <p>Sitthik</p>
@@ -34,47 +38,79 @@ if (!user || user.role !== "shopkeeper") {
     </div>
   </div>
 
-  <!-- Main -->
+  <!-- MAIN -->
   <div class="main">
 
-    <h1>Shopkeeper Dashboard</h1>
+    <!-- DASHBOARD -->
+    <div id="dashboardSection">
 
-    <!-- Stats -->
-    <div class="cards">
-      <div class="card blue">
-        <h2 id="productCount">9</h2>
-        <p>Products</p>
+      <h1>Shopkeeper Dashboard</h1>
+
+      <div class="cards">
+        <div class="card blue">
+          <h2>9</h2>
+          <p>Products</p>
+        </div>
+
+        <div class="card lightblue">
+          <h2>14</h2>
+          <p>Orders</p>
+        </div>
+
+        <div class="card orange">
+          <h2>₹2,19,787</h2>
+          <p>Revenue</p>
+        </div>
       </div>
 
-      <div class="card lightblue">
-        <h2>14</h2>
-        <p>Orders</p>
+      <div class="bottom-section">
+
+        <div class="store-card">
+          <h3>Bismillah Wood Furniture</h3>
+          <p class="location">📍 Singaperumal Koil</p>
+          <p class="time">🕒 9:00 AM - 9:00 PM</p>
+          <button class="store-btn">Manage Store</button>
+        </div>
+
+        <div class="orders-card">
+          <h3>Recent Orders</h3>
+          <p>#1028 - Siddharth</p>
+          <p>#1027 - Priya</p>
+          <p>#1026 - Shankar</p>
+        </div>
+
       </div>
 
-      <div class="card orange">
-        <h2>₹2,19,787</h2>
-        <p>Revenue</p>
-      </div>
     </div>
 
-    <!-- Bottom Section -->
-    <div class="bottom">
+    <!-- PRODUCTS -->
+    <div id="productsSection" style="display:none;">
 
-      <!-- Store -->
-      <div class="store">
-        <h3>Bismillah Wood Furniture</h3>
-        <p>📍 Singaperumal Koil</p>
-        <p>🕘 9:00 AM - 9:00 PM</p>
-
-        <button>Manage Store</button>
+      <!-- HEADER -->
+      <div class="products-header">
+        <h1>Manage Products</h1>
+        <button class="add-btn" onclick="openModal()">+ Add Product</button>
       </div>
 
-      <!-- Orders -->
-      <div class="orders">
-        <h3>Recent Orders</h3>
-        <p>#1028 - Siddharth</p>
-        <p>#1027 - Priya</p>
-        <p>#1026 - Shankar</p>
+      <!-- PRODUCT LIST -->
+      <div class="product-list">
+
+        <div class="product-item">
+          <img src="https://via.placeholder.com/80">
+          <div>
+            <h4>Teak Wood Sofa</h4>
+            <p>₹45,000 | Stock: 5</p>
+          </div>
+        </div>
+
+        <div class="product-item">
+          <img src="https://via.placeholder.com/80">
+          <div>
+            <h4>Chair</h4>
+            <p>₹1500 | Stock: 25</p>
+          </div>
+        </div>
+
       </div>
 
     </div>
@@ -82,6 +118,69 @@ if (!user || user.role !== "shopkeeper") {
   </div>
 
 </div>
+
+<!-- MODAL -->
+<div id="productModal" class="modal">
+
+  <div class="modal-box">
+
+    <span class="close" onclick="closeModal()">✖</span>
+
+    <h2>Add Product</h2>
+
+    <label>Upload Image</label>
+    <input type="file">
+
+    <label>Product Name</label>
+    <input type="text" placeholder="Enter product name">
+
+    <div class="row">
+      <div>
+        <label>Price</label>
+        <input type="number" placeholder="Enter price">
+      </div>
+
+      <div>
+        <label>Stock</label>
+        <input type="number" placeholder="Enter stock">
+      </div>
+    </div>
+
+    <button class="save-btn">Save Product</button>
+
+  </div>
+
+</div>
+
+<!-- JS -->
+<script>
+
+function showProducts(event) {
+  document.getElementById("dashboardSection").style.display = "none";
+  document.getElementById("productsSection").style.display = "block";
+
+  document.querySelectorAll(".sidebar ul li").forEach(li => li.classList.remove("active"));
+  event.target.classList.add("active");
+}
+
+function showDashboard(event) {
+  document.getElementById("dashboardSection").style.display = "block";
+  document.getElementById("productsSection").style.display = "none";
+
+  document.querySelectorAll(".sidebar ul li").forEach(li => li.classList.remove("active"));
+  event.target.classList.add("active");
+}
+
+/* MODAL */
+function openModal() {
+  document.getElementById("productModal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("productModal").style.display = "none";
+}
+
+</script>
 
 </body>
 </html>

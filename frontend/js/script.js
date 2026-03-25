@@ -76,3 +76,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
+function goToProducts(event) {
+  document.getElementById("productsSection").scrollIntoView({
+    behavior: "smooth"
+  });
+
+  document.querySelectorAll("li").forEach(li => li.classList.remove("active"));
+  event.target.classList.add("active");
+}
