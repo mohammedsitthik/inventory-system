@@ -1,8 +1,87 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shopkeeper Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <script>
 const user = JSON.parse(localStorage.getItem("user"));
 
-if (!user) {
-  alert("Please login first ❌");
+if (!user || user.role !== "shopkeeper") {
   window.location.href = "login.html";
 }
 </script>
+
+<div class="container">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Shopkeeper</h2>
+
+    <ul>
+      <li class="active">Dashboard</li>
+      <li>Manage Products</li>
+      <li>Manage Orders</li>
+    </ul>
+
+    <div class="user">
+      <p>Sitthik</p>
+      <button>Logout</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <h1>Shopkeeper Dashboard</h1>
+
+    <!-- Stats -->
+    <div class="cards">
+      <div class="card blue">
+        <h2 id="productCount">9</h2>
+        <p>Products</p>
+      </div>
+
+      <div class="card lightblue">
+        <h2>14</h2>
+        <p>Orders</p>
+      </div>
+
+      <div class="card orange">
+        <h2>₹2,19,787</h2>
+        <p>Revenue</p>
+      </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="bottom">
+
+      <!-- Store -->
+      <div class="store">
+        <h3>Bismillah Wood Furniture</h3>
+        <p>📍 Singaperumal Koil</p>
+        <p>🕘 9:00 AM - 9:00 PM</p>
+
+        <button>Manage Store</button>
+      </div>
+
+      <!-- Orders -->
+      <div class="orders">
+        <h3>Recent Orders</h3>
+        <p>#1028 - Siddharth</p>
+        <p>#1027 - Priya</p>
+        <p>#1026 - Shankar</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

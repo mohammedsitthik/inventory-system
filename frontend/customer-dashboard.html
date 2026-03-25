@@ -5,6 +5,14 @@
 </head>
 <body>
 
+  <script>
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user || user.role !== "customer") {
+  window.location.href = "login.html";
+}
+</script>
+
 <h2>Available Products</h2>
 
 <div id="productList"></div>

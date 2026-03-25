@@ -1,15 +1,8 @@
-const form = document.getElementById("loginForm");
-
-form.addEventListener("submit", async (e) => {
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-
-  if (!email || !password) {
-    alert("Fill all fields ❌");
-    return;
-  }
 
   try {
     const res = await fetch("http://localhost:5000/api/auth/login", {
@@ -22,18 +15,27 @@ form.addEventListener("submit", async (e) => {
 
     const data = await res.json();
 
-    if (data.success) {
+    // ✅ success check
+    if (res.ok) {
+
       alert("Login Successful ✅");
+
+      // save user
+      localStorage.setItem("user", JSON.stringify(data.user));
 
       // 🔥 role-based redirect
       if (data.user.role === "shopkeeper") {
         window.location.href = "shopkeeper-dashboard.html";
-      } else {
+      } 
+      else if (data.user.role === "customer") {
         window.location.href = "customer-dashboard.html";
+      } 
+      else {
+        alert("Unknown role ❌");
       }
 
     } else {
-      alert(data.message);
+      alert(data.message || "Login Failed ❌");
     }
 
   } catch (err) {
